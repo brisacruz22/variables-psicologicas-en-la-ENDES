@@ -1,0 +1,482 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Cargar bases
+
+```{r}
+# Cargar librería
+library(haven)
+library(dplyr)
+library(rio)
+library("readxl")
+```
+
+
+```{r}
+# Importar archivos
+
+ruta <- "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2023/endes_2023_violencia/REC84DV_2023.csv"
+ruta_2 <- "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2023/endes_2023_salud/CSALUD01_2023.csv"
+
+
+violencia_23 <- read.csv(ruta, stringsAsFactors = FALSE)
+salud_23 <- read.csv(ruta_2, stringsAsFactors = FALSE)
+
+```
+
+
+```{r}
+ruta_2015 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2015/CSALUD01.sav"
+ruta_2016 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2016/CSALUD01.sav"
+ruta_2017 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2017/CSALUD01.sav"
+ruta_2018 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2018/CSALUD01.sav"
+ruta_2019 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2019/CSALUD01.sav"
+
+
+salud_15 <- read_sav(ruta_2015)
+salud_16 <- read_sav(ruta_2016)
+salud_17 <- read_sav(ruta_2017)
+salud_18 <- read_sav(ruta_2018)
+salud_19 <- read_sav(ruta_2019)
+
+```
+
+
+```{r}
+
+ruta_2015 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2015/REC84DV.sav"
+ruta_2016 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2016/REC84DV.sav"
+ruta_2017 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2017/REC84DV.sav"
+ruta_2018 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2018/REC84DV.sav"
+ruta_2019 <- 
+  "C:/Users/brisa/OneDrive/Documentos/GitHub/variables-psicologicas-en-la-ENDES/endes_2019/REC84DV.sav"
+
+violencia_15 <- read_sav(ruta_2015)
+violencia_16 <- read_sav(ruta_2016)
+violencia_17 <- read_sav(ruta_2017)
+violencia_18 <- read_sav(ruta_2018)
+violencia_19 <- read_sav(ruta_2019)
+```
+
+
+
+
+Filtrar variables
+```{r}
+
+salud_23 <- salud_23 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729, 
+         QS704A:QS704I, 
+         QS706, QS707, 
+         QS25C5, QS25C6)
+violencia_23 <- violencia_23 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+
+```
+
+```{r}
+salud_15 <- salud_15 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729,
+         QS704A:QS704I, QS706, QS707)
+salud_16 <- salud_16 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729,
+         QS704A:QS704I, QS706, QS707)
+salud_17 <- salud_17 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729,
+         QS704A:QS704I, QS706, QS707)
+salud_18 <- salud_18 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729,
+         QS704A:QS704I, QS706, QS707)
+salud_19 <- salud_19 %>%
+  select(HHID, QHCLUSTER, QHNUMBER, QHHOME, QSNUMERO, 
+         QS713:QS729,
+         QS704A:QS704I, QS706, QS707)
+```
+
+```{r}
+violencia_15 <- violencia_15 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+violencia_16 <- violencia_16 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+violencia_17 <- violencia_17 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+violencia_18 <- violencia_18 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+violencia_19 <- violencia_19 %>%
+  select(CASEID, D103B, D105A:D105I, D103E, D121, 
+         D115B:D115C, D112A, D114)
+```
+
+
+Descriptivos simples
+
+```{r}
+salud_15[] <- lapply(salud_15, as.factor)
+salud_16[] <- lapply(salud_16, as.factor)
+salud_17[] <- lapply(salud_17, as.factor)
+salud_18[] <- lapply(salud_18, as.factor)
+salud_19[] <- lapply(salud_19, as.factor)
+salud_23[] <- lapply(salud_23, as.factor)
+
+violencia_15[] <- lapply(violencia_15, as.factor)
+violencia_16[] <- lapply(violencia_16, as.factor)
+violencia_17[] <- lapply(violencia_17, as.factor)
+violencia_18[] <- lapply(violencia_18, as.factor)
+violencia_19[] <- lapply(violencia_19, as.factor)
+violencia_23[] <- lapply(violencia_23, as.factor)
+```
+
+# Salud
+
+```{r}
+salud_23 <- salud_23 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_23 <- salud_23 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_23 <- salud_23 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707, QS25C5, QS25C6),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+```
+
+
+```{r}
+summary(salud_23[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", "QS706", "QS707", "QS25C5", "QS25C6")])
+
+```
+```{r}
+salud_15 <- salud_15 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_15 <- salud_15 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_15 <- salud_15 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+
+
+salud_16 <- salud_16 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_16 <- salud_16 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_16 <- salud_16 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+
+
+salud_17 <- salud_17 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_17 <- salud_17 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_17 <- salud_17 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+
+salud_18 <- salud_18 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_18 <- salud_18 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_18 <- salud_18 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+
+salud_19 <- salud_19 %>%
+  mutate(across(c(QS713:QS729),
+                ~ recode(., `1` = "Sí", `2` = "No", `8` = "No sabe/No recuerda", `9` = "Rehusa")))
+salud_19 <- salud_19 %>%
+  mutate(across(c(QS704A:QS704I),
+                ~ recode(., `0` = "Para Nada", `1` = "Varios días (de 1 a 6 días)", 
+                         `2` = "La mayoría de los días (de 7 a 11 días)", 
+                         `3` = "Casi todos los días (de 12 a más días)")))
+salud_19 <- salud_19 %>%
+  mutate(across(c(QS706),
+                ~ recode(., `1` = "Mucho", `2` = "Poco", `3` = "Nada")),
+         across(c(QS707),
+                ~ recode(., `1` = "Sí", `2` = "No", '8'="No sabe/No recuerda")))
+
+```
+
+```{r}
+summary(salud_15[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", 
+                   "QS706", "QS707")])
+```
+
+
+
+```{r}
+summary(salud_16[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", 
+                   "QS706", "QS707")])
+```
+
+
+```{r}
+summary(salud_17[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", 
+                   "QS706", "QS707")])
+```
+
+
+```{r}
+summary(salud_18[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", 
+                   "QS706", "QS707")])
+```
+
+
+```{r}
+summary(salud_19[c("QS713", "QS714", "QS715", "QS716", "QS717", "QS719", "QS720", "QS721", "QS722", "QS723", "QS724", "QS725", "QS726", "QS727", "QS728", "QS729", "QS704A", "QS704B", "QS704C", "QS704D", "QS704E", "QS704F", "QS704G", "QS704H", "QS704I", 
+                   "QS706", "QS707")])
+```
+
+# Violencia
+
+
+```{r, echo=FALSE, results='asis'}
+# Crear una tabla en HTML
+library(knitr)
+library(kableExtra)
+
+# Datos
+tabla <- data.frame(
+  Variable = c("D103B", "D105A", "D105B", "D105C", "D105D", "D105E", "D105F", "D105G", 
+               "D105H", "D105I", "D103E", "D121", "D115B", "D115C", "D112A", "D114"),
+  Descripción = c(
+    "Su esposo/compañero la ha amenazado con hacerle daño a usted o a alguien cercano a usted.",
+    "Su esposo/compañero alguna vez la empujó, sacudió o le tiró algo.",
+    "Su esposo/compañero alguna vez la abofeteó o le retorció el brazo.",
+    "Su esposo/compañero alguna vez la golpeó con el puño o con algo que pudo hacerle daño.",
+    "Su esposo/compañero alguna vez la pateó o arrastró.",
+    "Su esposo/compañero alguna vez trató de estrangularla o quemarla.",
+    "Su esposo/compañero alguna vez la amenazó con un cuchillo, pistola u otro tipo de arma.",
+    "Su esposo/compañero alguna vez la atacó/agredió con un cuchillo, pistola u otro tipo de arma.",
+    "Su esposo/compañero alguna vez utilizó la fuerza física para obligarla a tener relaciones sexuales aunque usted no quería.",
+    "Su esposo/compañero alguna vez la obligó a realizar actos sexuales que usted no aprueba.",
+    "Abuso emocional constante: Su esposo/compañero siempre insulta o la hace sentir mal.",
+    "Su padre alguna vez golpeó a su madre.",
+    "Desde los 15 años fue maltratada físicamente por su madre.",
+    "Desde los 15 años fue maltratada físicamente por su padre.",
+    "Con qué frecuencia lastimó físicamente a su esposo/compañero en los últimos 12 meses.",
+    "Con qué frecuencia su esposo/compañero toma bebidas alcohólicas."
+  )
+)
+
+# Generar tabla
+kable(tabla, format = "html", align = "c") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+
+```{r}
+# re-etiquetar
+violencia_23 <- violencia_23 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., `0` = "No", `1` = "Frecuentemente", `2` = "Algunas veces", `3` = "Nunca")))
+violencia_23 <- violencia_23 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_23 <- violencia_23 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Mucha frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+```
+
+
+```{r}
+summary(violencia_23[c("D103B", "D105A", "D105B", "D105C", "D105D", "D105E", "D105F", "D105G", "D105H", "D105I", "D103E", "D121", "D115B", "D115C", "D112A", "D114")])
+```
+
+
+```{r}
+violencia_15 <- violencia_15 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., 
+                         `0` = "No", 
+                         `1` = "Frecuentemente", 
+                         `2` = "Algunas veces", 
+                         `3` = "Nunca", 
+                         `4` = "Sí, viuda, frecuencia faltante", 
+                         `9` = "Missing")))
+```
+
+
+```{r}
+violencia_16 <- violencia_16 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., 
+                         `0` = "No", 
+                         `1` = "Frecuentemente", 
+                         `2` = "Algunas veces", 
+                         `3` = "Nunca", 
+                         `4` = "Sí, viuda, frecuencia faltante", 
+                         `9` = "Missing")))
+```
+
+
+```{r}
+violencia_17 <- violencia_17 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., 
+                         `0` = "No", 
+                         `1` = "Frecuentemente", 
+                         `2` = "Algunas veces", 
+                         `3` = "Nunca", 
+                         `4` = "Sí, viuda, frecuencia faltante", 
+                         `9` = "Missing")))
+
+violencia_18 <- violencia_18 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., 
+                         `0` = "No", 
+                         `1` = "Frecuentemente", 
+                         `2` = "Algunas veces", 
+                         `3` = "Nunca", 
+                         `4` = "Sí, viuda, frecuencia faltante", 
+                         `9` = "Missing")))
+violencia_19 <- violencia_19 %>%
+  mutate(across(c(D103B, D105A, D105B, D105C, D105D, D105E, D105F, D105G, D105H, D105I, D103E),
+                ~ recode(., 
+                         `0` = "No", 
+                         `1` = "Frecuentemente", 
+                         `2` = "Algunas veces", 
+                         `3` = "Nunca", 
+                         `4` = "Sí, viuda, frecuencia faltante", 
+                         `9` = "Missing")))
+violencia_15 <- violencia_15 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_16 <- violencia_16 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_17 <- violencia_17 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_18 <- violencia_18 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_19 <- violencia_19 %>%
+  mutate(across(c(D121, D115B, D115C),
+                ~ recode(., `0` = "No", `1` = "Sí", `8` = "No resp o No sabe")))
+violencia_15 <- violencia_15 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Con frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+violencia_16 <- violencia_16 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Con frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+violencia_17 <- violencia_17 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Con frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+violencia_18 <- violencia_18 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Con frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+violencia_19 <- violencia_19 %>%
+  mutate(across(c(D112A, D114),
+                ~ recode(., `0` = "Nunca", `1` = "Con frecuencia", `2` = "Algunas veces", `8` = "No sabe")))
+
+```
+
+
+```{r}
+# Summary para violencia_15
+summary(violencia_15 %>% select(D103B, D105A:D105I, D103E, D121, D115B:D115C, D112A, D114))
+```
+
+
+```{r}
+# Summary para violencia_16
+summary(violencia_16 %>% select(D103B, D105A:D105I, D103E, D121, D115B:D115C, D112A, D114))
+```
+
+```{r}
+# Summary para violencia_17
+summary(violencia_17 %>% select(D103B, D105A:D105I, D103E, D121, D115B:D115C, D112A, D114))
+```
+
+
+```{r}
+# Summary para violencia_18
+summary(violencia_18 %>% select(D103B, D105A:D105I, D103E, D121, D115B:D115C, D112A, D114))
+```
+
+
+```{r}
+# Summary para violencia_19
+summary(violencia_19 %>% select(D103B, D105A:D105I, D103E, D121, D115B:D115C, D112A, D114))
+```
+otra alternativa
+```{r}
+
+# Paso 1: Agregar columna de año a cada dataframe
+violencia_15 <- violencia_15 %>% mutate(Año = 2015)
+violencia_16 <- violencia_16 %>% mutate(Año = 2016)
+violencia_17 <- violencia_17 %>% mutate(Año = 2017)
+violencia_18 <- violencia_18 %>% mutate(Año = 2018)
+violencia_19 <- violencia_19 %>% mutate(Año = 2019)
+
+# Paso 2: Combinar todos los dataframes en uno solo
+violencia_combined <- bind_rows(violencia_15, violencia_16, violencia_17, violencia_18, violencia_19)
+
+# Paso 3: Agrupar por año y calcular frecuencias de categorías
+
+violencia_summary <- violencia_combined %>%
+  mutate(across(everything(), ~ ifelse(is.na(.), "NA", .))) %>%
+  group_by(Año) %>%
+  select(!CASEID) %>%
+  summarise(across(everything(), 
+                   ~ paste(names(table(.x)), table(.x), sep = ": ", collapse = ", "), 
+                   .names = "resultados_{col}"))
+
+```
+
+
+```{r}
+library(writexl)
+write_xlsx(violencia_summary, "violencia_resultadosy.xlsx")
+
+```
+
